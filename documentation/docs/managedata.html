@@ -1,0 +1,101 @@
+﻿<h1>Manage Data</h1>
+
+<h2>Food In</h2>
+
+<h4>Data Object Parameters | Types</h4>
+
+<ul>
+    <li>@FoodInID    | short</li>
+    <li>@Description | string</li>
+    <li>@Weight      | decimal</li>
+    <li>@Source      | string</li>
+    <li>@TimeStamp   | DateTime</li>
+</ul>
+
+<h2>Food Out</h2>
+
+<h4>Data Object Parameters | Types</h4>
+
+<ul>
+    <li>@DistributionID | short</li>
+    <li>@Description    | string</li>
+    <li>@Weight         | double</li>
+    <li>@Count          | short?</li>
+    <li>@TimeStamp      | DateTime</li>
+</ul>
+
+<h4>Example of Query/Sort/Bind</h4>
+
+<pre>
+var allFoodInQuery = (from c in db.FoodIns
+                        where c.USDAID != null
+                        select new
+                        {
+                            c.FoodInID,
+                            c.USDACategory.Description,
+                            c.Weight,
+                            c.FoodSource.Source,
+                            c.TimeStamp
+                        }).ToList();
+
+// sort list according to user choice
+if (sortingColumn.Equals("Category")) // if user wants to sort by Category
+{
+    if (sortAscending) // ascending Category
+        allFoodInQuery.Sort((x, y) => String.Compare(x.Description, y.Description));
+    else               // descending Category
+        allFoodInQuery.Sort((x, y) => String.Compare(y.Description, x.Description));
+}
+
+if (sortingColumn.Equals("Weight")) // if user wants to sort by Weight
+{
+    if (sortAscending) // ascending weight
+        allFoodInQuery.Sort((x, y) => String.Compare(x.Weight.ToString(), y.Weight.ToString())); 
+    else               // descending weight
+        allFoodInQuery.Sort((x, y) => String.Compare(y.Weight.ToString(), x.Weight.ToString()));
+}
+
+if (sortingColumn.Equals("Source")) // if user wants to sort by Source (donor)
+{
+    if (sortAscending) // ascending Source (donor)
+        allFoodInQuery.Sort((x, y) => String.Compare(x.Source, y.Source)); 
+    else               // descending Source (donor)
+        allFoodInQuery.Sort((x, y) => String.Compare(y.Source, x.Source));
+}
+
+if (sortingColumn.Equals("Timestamp")) // if user wants to sort by date (timestamp)
+{
+    if (sortAscending)  // ascending date (timestamp)
+        allFoodInQuery.Sort((x, y) => String.Compare(x.TimeStamp.ToString(), y.TimeStamp.ToString()));
+    else                // descending date (timestamp)
+        allFoodInQuery.Sort((x, y) => String.Compare(y.TimeStamp.ToString(), x.TimeStamp.ToString()));
+}
+// end sort list according to user choice
+
+DataTable dtFoodResults = new DataTable();
+dtFoodResults.Columns.Add("FoodInID");
+dtFoodResults.Columns.Add("Types");
+dtFoodResults.Columns.Add("Weight");
+dtFoodResults.Columns.Add("Source");
+dtFoodResults.Columns.Add("TimeStamp");
+
+for (int i = 0; i < allFoodInQuery.Count; i++)
+{
+
+    dtFoodResults.Rows.Add(allFoodInQuery.ElementAt(i).FoodInID,
+        allFoodInQuery.ElementAt(i).Description, allFoodInQuery.ElementAt(i).Weight,
+        allFoodInQuery.ElementAt(i).Source, allFoodInQuery.ElementAt(i).TimeStamp);
+}
+
+grdFoodInData.DataSource = dtFoodResults;
+grdFoodInData.DataBind();
+</pre>
+
+<h3>If Modifying - Items of Note</h3>
+
+<ul>
+    <li>Food In / Food Out version of page checked by query string</li>
+    <li>Food In and Food Out have different mechanics and different data</li>
+    <li>Both Food In and Food Out have USDA toggles-this changes data looked for</li>
+    <li>Search checking done in updateFoodInGrid() and updateFoodOutGrid()</li>
+</ul>

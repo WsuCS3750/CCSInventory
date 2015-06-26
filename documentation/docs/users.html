@@ -1,0 +1,25 @@
+﻿<h1>Users</h1>
+
+<h2>Data Object Parameters | Types</h2>
+
+<ul>
+    <li>@UserID    | short</li>
+    <li>@UserName  | string</li>
+    <li>@FirstName | string</li>
+    <li>@LastName  | string</li>
+    <li>@Admin     | boolean</li>
+</ul>
+
+<h4>Binding a GridView (grdUsers)</h4>
+
+<pre>
+using (CCSEntities db = new CCSEntities())
+{
+
+    var allUsersQuery = (from c in db.Users
+                            select new { c.UserID, c.UserName, c.FirstName, c.LastName, c.Admin });
+
+    grdUsers.DataSource = allUsersQuery.ToList();
+    grdUsers.DataBind();
+}
+</pre>

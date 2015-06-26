@@ -1,0 +1,62 @@
+﻿<h1>Report</h1>
+
+<p>
+    There are five types of Reports:
+</p>
+
+<h3>In\Out</h3>
+<p>
+    This shows how much of a category had incoming and outgoing. Also it will show the current inventory on hand for the category.
+</p>
+
+
+<h3>Incoming</h3>
+<p>
+    This report shows all the food in records between two specified dates. 
+</p>
+
+<h3>Inventory</h3>
+<p>
+    This shows all the current food in containers in the database ordery by location or category.
+</p>
+
+
+<h3>Grocery Rescue</h3>
+<p>
+    This is a report that CCS has to turn in weekly that states all the food they acquired through businesses that are partcipating in the Grocery Rescue program. This food is ussually perishable. 
+</p>
+
+<h3>Outgoing</h3>
+<p>
+    This report shows all the food out records between two specified dates. 
+</p>
+
+<h2>Report Creation</h2>
+
+<h3>choosetemplate.aspx</h3>
+
+<p>
+	The report type is passed in the query string to this page. This specifies how the pages will flow for the report creation.
+	
+    This page shows the user previous templates		 they made of the specified report they chose. They can run, edit, or delete any of these templates. If they choose edit they will be able edit all the options in the report.
+	
+	They will also be able to create a whole new report that will ask them all the options for the specified report. At the end theses options they will be asked to save the report as a template.
+</p>
+
+<h3>Options</h3>
+
+<p>
+    There are various options throughout each report type. Most the reports allows the user to select certian categories to show on the report such as agencies, food categories, etc.  Also, at the end of each options there is a specific option for the report type that allows the user to specify a view, a name, and possibly a few other options depending on the eport.
+</p>
+
+<h3>save.aspx</h3>
+
+<p>
+    The page will allow the user to save the report they just specified as a template, so that it may be use later quickly. They can specifiy a name then in the code it will serialize all the report options specified by using the template class (stored in AppCode) and save it to the database.
+</p>
+
+<h3>Displays</h3>
+
+<p>
+    Each Report has a display page that queries the data specified the template then generates the report via Windows Reports. 
+</p>

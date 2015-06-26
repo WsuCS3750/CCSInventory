@@ -1,0 +1,51 @@
+﻿<h1>Food In</h1>
+<h2>AKA Incoming Food</h2>
+
+<h2>Data Object Parameters</h2>
+
+<ul>
+    <li>@FoodInID</li>
+    <li>@TimeStamp</li>
+    <li>@Weight</li>
+    <li>@Units</li>
+    <li>@FoodSourceID</li>
+    <li>@CategoryID</li>
+    <li>@USDAID</li>
+</ul>
+
+<h2>Description</h2>
+
+<p>FoodIn table is used to log the food being received.</p>
+
+<p>
+    FoodInID field is an auto-incrementing number.
+</p>
+
+<p>
+    TimeStamp is used to log the time and date the donation was received.
+</p>
+
+<p>
+    Weight is used the total weight of the donation.
+</p>
+
+<p>
+    Units is used to track the number of cases received.
+    Units is a nullable field.
+</p>
+
+<p>
+    FoodSourceID is used to link a foodsource (donor) to the donation being received.
+</p>
+
+<p>
+    CategoryID is used to link a category (food type) to a donation, 
+    in order to specify what the received donation is. 
+    The CategoryID is nullable.
+</p>
+
+<p>
+    USDAID is used to link a donation to  a particular USDA category, 
+    in order to specify what the received donation is.<br/> 
+    The USDAID is nullable and is only used for donations from the USDA donor.
+</p>

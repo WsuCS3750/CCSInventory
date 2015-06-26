@@ -1,0 +1,103 @@
+﻿<h1>Users</h1>
+
+<h2>Data Object Parameters | Types</h2>
+
+<ul>
+    <li>@UserID    | short</li>
+    <li>@UserName  | string</li>
+    <li>@Password  | string</li>
+    <li>@FirstName | string</li>
+    <li>@LastName  | string</li>
+    <li>@Admin     | boolean</li>
+</ul>
+
+<h2>Saving an Added User</h2>
+
+<pre>
+using (CCSEntities db = new CCSEntities())
+{
+    User user = new User();
+    user.FirstName = txtFirstName.Text;
+    user.LastName = txtLastName.Text;
+    user.UserName = txtUserName.Text;
+    user.Password = txtPass.Text;
+    if (ddlAddAdmin.SelectedItem.ToString().Equals("Yes"))
+        user.Admin = true;
+    if (ddlAddAdmin.SelectedItem.ToString().Equals("No"))
+        user.Admin = false;
+
+    // Check for duplicate userName
+    if (db.Users.Where(u => u.UserName.ToLower() == txtUserName.Text.ToLower()).Count() > 0)
+    {
+        lblResponse.Visible = true;
+        lblResponse.ForeColor = System.Drawing.Color.Red;
+        lblResponse.Text = "Cannot add duplicate username: " + txtUserName.Text + "!";
+    }
+    else
+    {
+        db.Users.Add(user);
+        db.SaveChanges();
+
+        // Check to make sure the new user got saved
+        if (db.Users.Where(u => u.UserName.ToLower() == txtUserName.Text.ToLower()).Count() > 0)
+        {
+            lblResponse.Visible = true;
+            lblResponse.Text = "Success!  Username: " + txtUserName.Text + " added to the system!";
+        }
+        else
+        {
+            lblResponse.Visible = true;
+            lblResponse.Text = "Error saving to the database!";
+        }
+
+    }
+</pre>
+
+<h2>Saving an Edited User</h2>
+
+<pre>
+using (CCSEntities db = new CCSEntities())
+{
+
+    short uID = short.Parse(Session["editWho"].ToString());
+
+    User editUserInfo = (from c in db.Users
+                            where c.UserID.Equals(uID)
+                            select c).FirstOrDefault();
+
+    string tempName = editUserInfo.UserName.ToString();
+
+    editUserInfo.UserName = txtEditUserName.Text;
+    editUserInfo.Password = txtEditPass.Text;
+    editUserInfo.FirstName = txtEditFirstName.Text;
+    editUserInfo.LastName = txtEditLastName.Text;
+    if (ddlEditAdmin.SelectedItem.ToString().Equals("Yes"))
+        editUserInfo.Admin = true;
+    else if (ddlEditAdmin.SelectedItem.ToString().Equals("No"))
+        editUserInfo.Admin = false;
+
+    //Check to see if userName has been changed
+    if (!tempName.Equals(txtEditUserName.Text))
+    {
+        // Check to see if the new userName is a duplicate
+        if (db.Users.Where(u => u.UserName.ToLower() == txtEditUserName.Text.ToLower()).Count() > 0)
+        {
+            lblResponse.Visible = true;
+            lblResponse.ForeColor = System.Drawing.Color.Red;
+            lblResponse.Text = "Cannot save duplicate username: " + txtEditUserName.Text + "!";
+        }
+        else
+        {
+            db.SaveChanges();
+            lblResponse.Visible = true;
+            lblResponse.Text = "Changes to username: " + txtEditUserName.Text + ", successfully saved!";
+        }
+    }
+    else // userName has not been changed, just save changes
+    {
+        db.SaveChanges();
+        lblResponse.Visible = true;
+        lblResponse.Text = "Changes to username: " + txtEditUserName.Text + ", successfully saved!";
+    }
+}
+</pre>
