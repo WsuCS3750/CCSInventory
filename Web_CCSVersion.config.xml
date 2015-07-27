@@ -77,45 +77,26 @@
   <entityFramework>
     <defaultConnectionFactory type="System.Data.Entity.Infrastructure.SqlConnectionFactory, EntityFramework">
       <parameters>
-        <parameter value="      Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Program Files\Microsoft SQL Server\MSSQL12.IMAGISCCS\MSSQL\DATA\Imagis.mdf;Integrated Security=True;Connect Timeout=30; MultipleActiveResultSets=True" />
+        <parameter value="Data Source=localhost; Integrated Security=True; MultipleActiveResultSets=True" />
       </parameters>
     </defaultConnectionFactory>
   </entityFramework>
   <connectionStrings>
-
-
-    <!-- 
+    
+    
+    <!--  
+    <add name="CCSEntities" connectionString="metadata=res://*/App_Code.CCSEntities.csdl|res://*/App_Code.CCSEntities.ssdl|res://*/App_Code.CCSEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=localhost;initial catalog=dbo;user id=sa;password=abc123;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
     
     ORIGINAL
-    
-    
-    <add name="CCSEntities" connectionString="metadata=res://*/App_Code.CCSEntities.csdl|res://*/App_Code.CCSEntities.ssdl|res://*/App_Code.CCSEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=CCSTestDB.db.10040486.hostedresource.com;initial catalog=CCSTestDB;user id=CCSTestDB;password=G0thamcity!;multipleactiveresultsets=True;application name=EntityFramework&quot;"
-      providerName="System.Data.EntityClient" />
-    <add name="CCSTestDBConnectionString" connectionString="Data Source=CCSTestDB.db.10040486.hostedresource.com;Initial Catalog=CCSTestDB;User ID=CCSTestDB;Password=G0thamcity!;MultipleActiveResultSets=True;Application Name=EntityFramework"
-      providerName="System.Data.SqlClient" />
-              
-              
-    
-    
-    <add name="CCSEntities" connectionString="metadata=res://*/App_Code.CCSEntities.csdl|res://*/App_Code.CCSEntities.ssdl|res://*/App_Code.CCSEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=CCSTestDB.db.10040486.hostedresource.com;initial catalog=CCSTestDB;user id=CCSTestDB;password=G0thamcity!;multipleactiveresultsets=True;application name=EntityFramework&quot;"
-      providerName="System.Data.EntityClient" />
-    <add name="CCSTestDBConnectionString" connectionString="Data Source=CCSTestDB.db.10040486.hostedresource.com;Initial Catalog=CCSTestDB;User ID=CCSTestDB;Password=G0thamcity!;MultipleActiveResultSets=True;Application Name=EntityFramework"
-      providerName="System.Data.SqlClient" />
-      
-      
-      //ONE ATTEMPT, DOES NOT HAVE THE USERNAME AND PASSWORD
-      
-          <add name="CCSEntities" connectionString="metadata=res://*/App_Code.CCSEntities.csdl|res://*/App_Code.CCSEntities.ssdl|res://*/App_Code.CCSEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=C:\Program Files\Microsoft SQL Server\MSSQL12.IMAGISCCS\MSSQL\DATA\Imagis.mdf;multipleactiveresultsets=True;application name=EntityFramework&quot;"
-  providerName="System.Data.EntityClient" />
-      
-      
-      // CONNECTS IN SERVER EXPLORER
-      Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename="C:\Program Files\Microsoft SQL Server\MSSQL12.IMAGISCCS\MSSQL\DATA\Imagis.mdf";Integrated Security=True;Connect Timeout=30
-      
-      -->
+        <add name="CCSEntities" connectionString="metadata=res://*/App_Code.CCSEntities.csdl|res://*/App_Code.CCSEntities.ssdl|res://*/App_Code.CCSEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.\IMAGISCCS;initial catalog=Imagis;user id=ImagisDB;password=G0thamcity!;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
 
-    <add name="CCSEntities" connectionString="metadata=res://*/App_Code.CCSEntities.csdl|res://*/App_Code.CCSEntities.ssdl|res://*/App_Code.CCSEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Program Files\Microsoft SQL Server\MSSQL12.IMAGISCCS\MSSQL\DATA\Imagis.mdf;Integrated Security=True;Connect Timeout=30;application name=EntityFramework&quot;"
-  providerName="System.Data.EntityClient" />
+
+        
+
+    -->
+
+    <add name="CCSEntities" connectionString="metadata=res://*/App_Code.CCSEntities.csdl|res://*/App_Code.CCSEntities.ssdl|res://*/App_Code.CCSEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.\IMAGISCCS;initial catalog=Imagis;user id=ImagisDB;password=G0thamcity!;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+
 
 
   </connectionStrings>
