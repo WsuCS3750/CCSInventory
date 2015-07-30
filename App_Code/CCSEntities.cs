@@ -167,7 +167,7 @@ public partial class FoodIn
     public virtual USDACategory USDACategory { get; set; }
 }
 
-public partial class FoodOut
+public partial class FoodOut : IComparable<FoodOut>
 {
     public short DistributionID { get; set; }
     public double Weight { get; set; }
@@ -186,6 +186,109 @@ public partial class FoodOut
     public virtual FoodCategory FoodCategory { get; set; }
     public virtual FoodSourceType FoodSourceType { get; set; }
     public virtual USDACategory USDACategory { get; set; }
+
+
+
+    /**
+        Added the food out sorting method so they can be sorted easily
+    
+        @Author: Jake Abel
+
+    */
+
+    private static string taxable = "In-Kind (Taxable)";
+    private static string nonTaxable = "In-Kind (Non-Tax)";
+    private static string noAgency = "No-Agency";
+
+    // @Authors Jake Abel
+    public int CompareTo(FoodOut other)
+    {
+//        Console.WriteLine(this.FoodSourceType.FoodSourceType1);
+//        return this.FoodSourceType.FoodSourceType1.CompareTo(other.FoodSourceType.FoodSourceType1);           // usda and grocery rescue
+
+//        Console.WriteLine(this.DistributionType.DistributionType1);
+//        return this.DistributionType.DistributionType1.CompareTo(other.DistributionType.DistributionType1);     // on the line and transfered
+
+
+        // Put the taxable first, and then the non taxable, and  then whatever
+        if (this.FoodSourceType.FoodSourceType1.Equals(taxable) || this.FoodSourceType.FoodSourceType1.Equals(nonTaxable) ||
+            other.FoodSourceType.FoodSourceType1.Equals(taxable) || other.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+        {
+            if (this.FoodSourceType.FoodSourceType1.Equals(taxable) && !other.FoodSourceType.FoodSourceType1.Equals(taxable))
+            {
+                return -1;
+            }
+
+            if (other.FoodSourceType.FoodSourceType1.Equals(taxable) && !this.FoodSourceType.FoodSourceType1.Equals(taxable))
+            {
+                return 1;
+            }
+
+            if (this.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !other.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+            {
+                return -1;
+            }
+
+            if (other.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !this.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+            {
+                return 1;
+            }
+
+        }
+
+        if (this.FoodSourceType.FoodSourceType1.Contains(taxable) && !other.FoodSourceType.FoodSourceType1.Contains(taxable))
+        {
+            return 1;
+        }
+        if (this.FoodSourceType.FoodSourceType1.Contains(nonTaxable) && !other.FoodSourceType.FoodSourceType1.Contains(nonTaxable))
+        {
+            return 1;
+        }
+
+        int ret = this.DistributionType.DistributionType1.CompareTo(other.DistributionType.DistributionType1);
+        if (ret != 0)
+        {
+            return ret;
+        }
+
+
+        // Sort based on agency very last of all
+        if (this.Agency == null && other.Agency == null)
+        {
+            return 0;
+        }
+        else if (this.Agency == null)
+        {
+            return noAgency.CompareTo(other.Agency.AgencyName);
+        }
+        else if (other.Agency == null)
+        {
+            return this.Agency.AgencyName.CompareTo(noAgency);
+        }
+        else
+        {
+            return this.Agency.AgencyName.CompareTo(other.Agency.AgencyName);
+        }
+
+        // Old agency sorting
+        //        ret = this.DistributionType.CompareTo(other.DistributionType);
+        //        if (ret != 0)
+        //        {
+        //            return ret;
+        //        }
+        //
+        //        ret = this.Agency.CompareTo(other.Agency);
+        //        return ret;
+
+
+
+    }
+
+
+
+
+
+
 }
 
 public partial class FoodSource

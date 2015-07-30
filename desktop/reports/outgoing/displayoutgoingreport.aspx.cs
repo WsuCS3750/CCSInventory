@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -69,10 +70,15 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
     {
         ReportsDataSet ds = new ReportsDataSet();
 
+        Console.WriteLine(template.ToString());
+        
         using (CCSEntities db = new CCSEntities())
         {
+            
             DateTime dt = enddate.AddDays(1);
             List<FoodOut> data = db.FoodOuts.Where(f => (f.TimeStamp >= startdate.Date && f.TimeStamp < dt.Date)).ToList();
+
+            
 
             if (template.FoodSourceTypesSelection == ReportTemplate.SelectionType.SOME)
             {
@@ -162,11 +168,98 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
 
             data = foodInRegularData;
 
+            // Original Version
+            //            foreach (var i in data)
+            //            {
+            //                if(i.FoodCategory != null || i.USDACategory != null)
+            //                    ds.Outgoing.AddOutgoingRow(i.FoodCategory == null? i.USDACategory.Description: i.FoodCategory.CategoryType, i.BinNumber, i.TimeStamp, (double)(i.Count ?? 0), i.Weight, i.Agency == null ? "No-Agency" : i.Agency.AgencyName, i.DistributionType.DistributionType1, i.FoodSourceType.FoodSourceType1);
+            //            }
+
+
+
+
+            /**
+                    Fix of sorting of everything
+                    @Author Jake Abel
+            */
+
+            List<FoodOut> sortedFoodOut = new List<FoodOut>();
+
+            foreach(var i in data)
+            {
+                sortedFoodOut.Add(i);
+            }
+
+            string taxable = "In-Kind (Taxable)";
+            string nonTaxable = "In-Kind (Non-Tax)";
+
+            data.Sort();
+
+            
+
+            // Modified version
             foreach (var i in data)
             {
-                if(i.FoodCategory != null || i.USDACategory != null)
-                    ds.Outgoing.AddOutgoingRow(i.FoodCategory == null? i.USDACategory.Description: i.FoodCategory.CategoryType, i.BinNumber, i.TimeStamp, (double)(i.Count ?? 0), i.Weight, i.Agency == null ? "No-Agency" : i.Agency.AgencyName, i.DistributionType.DistributionType1, i.FoodSourceType.FoodSourceType1);
+
+//              FoodCategory foodCategory = i.FoodCategory;
+                if (i.FoodCategory != null || i.USDACategory != null)
+                {
+                    //ds.Outgoing.AddOutgoingRow(i.FoodCategory == null? i.USDACategory.Description: i.FoodCategory.CategoryType, i.BinNumber, i.TimeStamp, (double)(i.Count ?? 0), 
+                    //i.Weight, i.Agency == null ? "No-Agency" : i.Agency.AgencyName, i.DistributionType.DistributionType1, i.FoodSourceType.FoodSourceType1);
+
+                    string foodCategory = "";
+                    if (i.FoodCategory == null)
+                    {
+                        foodCategory = i.USDACategory.Description;
+                    }
+                    else
+                    {
+                        foodCategory = i.FoodCategory.CategoryType;
+                    }
+
+
+                    short binNumber = i.BinNumber;
+                    DateTime timeStamp = i.TimeStamp;
+                    short count;
+                    if (i.Count == null)
+                    {
+                        count = 0;
+                    }
+                    else
+                    {
+                        count = (short)i.Count;
+                    }
+                
+                        
+                        
+                    double weight = i.Weight;
+
+
+                    string agencyName = "";
+
+                    if (i.Agency == null)
+                    {
+                        agencyName = "No-Agency";
+                    }
+                    else
+                    {
+                        agencyName = i.Agency.AgencyName;
+                    }
+
+
+                    string distributionType = i.DistributionType.DistributionType1;
+                    string foodSourceType2 = i.FoodSourceType.FoodSourceType1;
+
+
+                    ds.Outgoing.AddOutgoingRow(foodCategory, binNumber, timeStamp, count, weight, agencyName, distributionType, foodSourceType2);
+                }
+
+
             }
+
+
+
+
         }
         return ds;
     }

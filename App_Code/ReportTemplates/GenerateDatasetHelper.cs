@@ -25,9 +25,16 @@ public class GenerateDatasetHelper
             else if (template.CategoriesSelection == ReportTemplate.SelectionType.REGULAR)
             {
                 foodCategoriesData = (from f in db.FoodCategories
-                                        where f.Perishable == false && f.NonFood == false
-                                        orderby f.CategoryType
-                                        select f).ToList();
+                    where f.Perishable == false && f.NonFood == false
+                    orderby f.CategoryType
+                    select f).ToList();
+
+
+//              Original
+//            foodCategoriesData = (from f in db.FoodCategories
+//                                  where f.Perishable == false && f.NonFood == false
+//                                  orderby f.CategoryType
+//                                  select f).ToList();
             }
             else if (template.CategoriesSelection == ReportTemplate.SelectionType.PERISHABLE)
             {
