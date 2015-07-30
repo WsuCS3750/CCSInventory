@@ -190,24 +190,48 @@ public partial class FoodOut : IComparable<FoodOut>
 
 
     /**
-        Added the food out sorting method so they can be sorted easily
-    
+        Added the food out sorting method so they can be sorted easily as requested by pat.
+        Makes it easy to sort by using the List<FoodOut>.Sort() method
         @Author: Jake Abel
-
     */
 
     private static string taxable = "In-Kind (Taxable)";
     private static string nonTaxable = "In-Kind (Non-Tax)";
     private static string noAgency = "No-Agency";
 
-    // @Authors Jake Abel
+
     public int CompareTo(FoodOut other)
     {
-//        Console.WriteLine(this.FoodSourceType.FoodSourceType1);
-//        return this.FoodSourceType.FoodSourceType1.CompareTo(other.FoodSourceType.FoodSourceType1);           // usda and grocery rescue
 
-//        Console.WriteLine(this.DistributionType.DistributionType1);
-//        return this.DistributionType.DistributionType1.CompareTo(other.DistributionType.DistributionType1);     // on the line and transfered
+
+
+        // Sorting based on FoodSourceType (USDA, Grocery Rescue, Taxable)
+        //        Console.WriteLine(this.FoodSourceType.FoodSourceType1);
+        //        return this.FoodSourceType.FoodSourceType1.CompareTo(other.FoodSourceType.FoodSourceType1);           
+
+
+
+
+        // Sorting based on DistributionType (on the line, transfered, spoiled etc...)
+        //        Console.WriteLine(this.DistributionType.DistributionType1);
+        //        return this.DistributionType.DistributionType1.CompareTo(other.DistributionType.DistributionType1);     
+
+
+
+
+        // Sorting based on agency, Warning: has null sometimes as Agency Name
+        // Old agency sorting
+        //        ret = this.DistributionType.CompareTo(other.DistributionType);
+        //        if (ret != 0)
+        //        {
+        //            return ret;
+        //        }
+        //
+        //        ret = this.Agency.CompareTo(other.Agency);
+        //        return ret;
+
+
+
 
 
         // Put the taxable first, and then the non taxable, and  then whatever
@@ -245,6 +269,8 @@ public partial class FoodOut : IComparable<FoodOut>
             return 1;
         }
 
+
+        // Sorting based on distribution type, if they are the same, continue
         int ret = this.DistributionType.DistributionType1.CompareTo(other.DistributionType.DistributionType1);
         if (ret != 0)
         {
@@ -270,23 +296,7 @@ public partial class FoodOut : IComparable<FoodOut>
             return this.Agency.AgencyName.CompareTo(other.Agency.AgencyName);
         }
 
-        // Old agency sorting
-        //        ret = this.DistributionType.CompareTo(other.DistributionType);
-        //        if (ret != 0)
-        //        {
-        //            return ret;
-        //        }
-        //
-        //        ret = this.Agency.CompareTo(other.Agency);
-        //        return ret;
-
-
-
     }
-
-
-
-
 
 
 }

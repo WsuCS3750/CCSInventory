@@ -178,10 +178,7 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
 
 
 
-            /**
-                    Fix of sorting of everything
-                    @Author Jake Abel
-            */
+
 
             List<FoodOut> sortedFoodOut = new List<FoodOut>();
 
@@ -190,11 +187,85 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
                 sortedFoodOut.Add(i);
             }
 
-            string taxable = "In-Kind (Taxable)";
-            string nonTaxable = "In-Kind (Non-Tax)";
+//            string taxable = "In-Kind (Taxable)";
+//            string nonTaxable = "In-Kind (Non-Tax)";
 
-            data.Sort();
+            // Sort using the compare to method within 
+            //            data.Sort();
 
+
+            const string taxable = "In-Kind (Taxable)";
+            const string nonTaxable = "In-Kind (Non-Tax)";
+            const string noAgency = "No-Agency";
+
+
+
+            data.Sort(delegate(FoodOut dis, FoodOut otr)
+            {
+
+
+                // Put the taxable first, and then the non taxable, and  then whatever
+                if (dis.FoodSourceType.FoodSourceType1.Equals(taxable) || dis.FoodSourceType.FoodSourceType1.Equals(nonTaxable) ||
+                    otr.FoodSourceType.FoodSourceType1.Equals(taxable) || otr.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+                {
+                    if (dis.FoodSourceType.FoodSourceType1.Equals(taxable) && !otr.FoodSourceType.FoodSourceType1.Equals(taxable))
+                    {
+                        return -1;
+                    }
+
+                    if (otr.FoodSourceType.FoodSourceType1.Equals(taxable) && !dis.FoodSourceType.FoodSourceType1.Equals(taxable))
+                    {
+                        return 1;
+                    }
+
+                    if (dis.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !otr.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+                    {
+                        return -1;
+                    }
+
+                    if (otr.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !dis.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+                    {
+                        return 1;
+                    }
+
+                }
+
+                if (dis.FoodSourceType.FoodSourceType1.Contains(taxable) && !otr.FoodSourceType.FoodSourceType1.Contains(taxable))
+                {
+                    return 1;
+                }
+                if (dis.FoodSourceType.FoodSourceType1.Contains(nonTaxable) && !otr.FoodSourceType.FoodSourceType1.Contains(nonTaxable))
+                {
+                    return 1;
+                }
+
+
+                // Sorting based on distribution type, if they are the same, continue
+                int ret = dis.DistributionType.DistributionType1.CompareTo(otr.DistributionType.DistributionType1);
+                if (ret != 0)
+                {
+                    return ret;
+                }
+
+
+                // Sort based on agency very last of all
+                if (dis.Agency == null && otr.Agency == null)
+                {
+                    return 0;
+                }
+                else if (dis.Agency == null)
+                {
+                    return noAgency.CompareTo(otr.Agency.AgencyName);
+                }
+                else if (otr.Agency == null)
+                {
+                    return dis.Agency.AgencyName.CompareTo(noAgency);
+                }
+                else
+                {
+                    return dis.Agency.AgencyName.CompareTo(otr.Agency.AgencyName);
+                }
+            });
             
 
             // Modified version
