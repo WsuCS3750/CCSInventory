@@ -77,7 +77,6 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
             
             DateTime dt = enddate.AddDays(1);
             List<FoodOut> data = db.FoodOuts.Where(f => (f.TimeStamp >= startdate.Date && f.TimeStamp < dt.Date)).ToList();
-
             
 
             if (template.FoodSourceTypesSelection == ReportTemplate.SelectionType.SOME)
@@ -186,11 +185,8 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
             {
                 sortedFoodOut.Add(i);
             }
-
-//            string taxable = "In-Kind (Taxable)";
-//            string nonTaxable = "In-Kind (Non-Tax)";
-
-            // Sort using the compare to method within 
+            
+            // Sort using the compare to method within (may cause errors so removing)
             //            data.Sort();
 
 
@@ -199,10 +195,8 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
             const string noAgency = "No-Agency";
 
 
-
             data.Sort(delegate(FoodOut dis, FoodOut otr)
             {
-
 
                 // Put the taxable first, and then the non taxable, and  then whatever
                 if (dis.FoodSourceType.FoodSourceType1.Equals(taxable) || dis.FoodSourceType.FoodSourceType1.Equals(nonTaxable) ||
@@ -301,10 +295,7 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
                         count = (short)i.Count;
                     }
                 
-                        
-                        
                     double weight = i.Weight;
-
 
                     string agencyName = "";
 
