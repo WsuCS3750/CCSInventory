@@ -167,29 +167,22 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
 
             data = foodInRegularData;
 
-            // Original Version
-            //            foreach (var i in data)
-            //            {
-            //                if(i.FoodCategory != null || i.USDACategory != null)
-            //                    ds.Outgoing.AddOutgoingRow(i.FoodCategory == null? i.USDACategory.Description: i.FoodCategory.CategoryType, i.BinNumber, i.TimeStamp, (double)(i.Count ?? 0), i.Weight, i.Agency == null ? "No-Agency" : i.Agency.AgencyName, i.DistributionType.DistributionType1, i.FoodSourceType.FoodSourceType1);
-            //            }
 
 
 
 
 
 
-            List<FoodOut> sortedFoodOut = new List<FoodOut>();
 
-            foreach(var i in data)
-            {
-                sortedFoodOut.Add(i);
-            }
-            
-            // Sort using the compare to method within (may cause errors so removing)
-            //            data.Sort();
+            /**
+            *       @Author Jake Abel
+            *       
+            *       Sort the results based on FoodSource Type, Distribution type, and then based on Agency.
+            */
 
 
+
+            // Static variables of what they want to come first.
             const string taxable = "In-Kind (Taxable)";
             const string nonTaxable = "In-Kind (Non-Tax)";
             const string noAgency = "No-Agency";
@@ -233,14 +226,12 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
                     return 1;
                 }
 
-
                 // Sorting based on distribution type, if they are the same, continue
                 int ret = dis.DistributionType.DistributionType1.CompareTo(otr.DistributionType.DistributionType1);
                 if (ret != 0)
                 {
                     return ret;
                 }
-
 
                 // Sort based on agency very last of all
                 if (dis.Agency == null && otr.Agency == null)
@@ -260,9 +251,20 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
                     return dis.Agency.AgencyName.CompareTo(otr.Agency.AgencyName);
                 }
             });
-            
 
-            // Modified version
+
+
+            // Original Version @Author Nittaya Phonharath
+            //            foreach (var i in data)
+            //            {
+            //                if(i.FoodCategory != null || i.USDACategory != null)
+            //                    ds.Outgoing.AddOutgoingRow(i.FoodCategory == null? i.USDACategory.Description: i.FoodCategory.CategoryType, i.BinNumber, i.TimeStamp, (double)(i.Count ?? 0), i.Weight, i.Agency == null ? "No-Agency" : i.Agency.AgencyName, i.DistributionType.DistributionType1, i.FoodSourceType.FoodSourceType1);
+            //            }
+
+
+            // @Author Jake Abel
+            // Modified version, used for cleanliness and readability 
+
             foreach (var i in data)
             {
 
@@ -281,8 +283,7 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
                     {
                         foodCategory = i.FoodCategory.CategoryType;
                     }
-
-
+                    
                     short binNumber = i.BinNumber;
                     DateTime timeStamp = i.TimeStamp;
                     short count;
@@ -308,19 +309,13 @@ public partial class desktop_reports_outgoing_displayoutgoingreport : System.Web
                         agencyName = i.Agency.AgencyName;
                     }
 
-
                     string distributionType = i.DistributionType.DistributionType1;
                     string foodSourceType2 = i.FoodSourceType.FoodSourceType1;
-
 
                     ds.Outgoing.AddOutgoingRow(foodCategory, binNumber, timeStamp, count, weight, agencyName, distributionType, foodSourceType2);
                 }
 
-
             }
-
-
-
 
         }
         return ds;

@@ -68,6 +68,8 @@ public partial class desktop_reports_incoming_DisplayIncomingReport : System.Web
     {
         ReportsDataSet ds = new ReportsDataSet();
 
+        
+
         using (CCSEntities db = new CCSEntities())
         {
             DateTime dt = enddate.AddDays(1);
@@ -152,17 +154,150 @@ public partial class desktop_reports_incoming_DisplayIncomingReport : System.Web
 
             data = foodInRegularData;
 
+
+
+
+
+            // Static variables of what they want to come first.    @Author Jake Abel
+            const string taxable = "In-Kind (Taxable)";
+            const string nonTaxable = "In-Kind (Non-Tax)";
+            const string noAgency = "No-Agency";
+
+            /**
+                Sort the foodIn similar to the food out
+                ADDED by
+                @Author Jake Abel
+            */
+
+            // ds.Incoming.AddIncomingRow(categoryType, timeStamp, count, weight, foodSource, address, foodSourceType1);
+            // Sort based on in-Kind (taxable and non-tax) and then 
+            data.Sort(delegate (FoodIn dis, FoodIn otr)
+            {
+//                dis.FoodSource.FoodSourceType.FoodSourceType1         // 
+                // Put the taxable first, and then the non taxable, and then whatever
+                if (dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) || dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable) ||
+                    otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) || otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+                {
+                    if (dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable))
+                    {
+                        return -1;
+                    }
+
+                    if (otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) && !dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable))
+                    {
+                        return 1;
+                    }
+
+                    if (dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+                    {
+                        return -1;
+                    }
+
+                    if (otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+                    {
+                        return 1;
+                    }
+
+                }
+
+                if (dis.FoodSource.FoodSourceType.FoodSourceType1.Contains(taxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Contains(taxable))
+                {
+                    return 1;
+                }
+                if (dis.FoodSource.FoodSourceType.FoodSourceType1.Contains(nonTaxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Contains(nonTaxable))
+                {
+                    return 1;
+                }
+
+                return dis.FoodSource.Source.CompareTo(otr.FoodSource.Source);
+
+
+//                return 0;
+            });
+
+
+
+
+
+            //ORIGINAL VERSION, @Author Nittaya P.
+            //            foreach (var i in data)
+            //            {
+            //                if (i.FoodCategory != null || i.USDACategory != null)
+            //                {
+            //                    string address = string.Format("{0} {1} {2}, {3} {4}", i.FoodSource.Address.StreetAddress1 ?? "",
+            //                        i.FoodSource.Address.StreetAddress2 ?? "", i.FoodSource.Address.City.CityName ?? "",
+            //                        i.FoodSource.Address.State == null ? "" : i.FoodSource.Address.State.StateShortName, 
+            //                        i.FoodSource.Address.Zipcode.ZipCode1 ?? "");
+            //                    ds.Incoming.AddIncomingRow(i.FoodCategory == null ? i.USDACategory.Description : i.FoodCategory.CategoryType, i.TimeStamp, i.Count == null ? 0 : (double)i.Count, i.Weight == null ? 0 : (double)i.Weight, i.FoodSource.Source, address, i.FoodSource.FoodSourceType.FoodSourceType1);
+            //                }
+            //            }
+
+
+            /**
+                    Expanded version for simplicities sake
+                    @Author Jake Abel            
+            */
+
+            
             foreach (var i in data)
             {
                 if (i.FoodCategory != null || i.USDACategory != null)
                 {
                     string address = string.Format("{0} {1} {2}, {3} {4}", i.FoodSource.Address.StreetAddress1 ?? "",
                         i.FoodSource.Address.StreetAddress2 ?? "", i.FoodSource.Address.City.CityName ?? "",
-                        i.FoodSource.Address.State == null ? "" : i.FoodSource.Address.State.StateShortName, 
+                        i.FoodSource.Address.State == null ? "" : i.FoodSource.Address.State.StateShortName,
                         i.FoodSource.Address.Zipcode.ZipCode1 ?? "");
-                    ds.Incoming.AddIncomingRow(i.FoodCategory == null ? i.USDACategory.Description : i.FoodCategory.CategoryType, i.TimeStamp, i.Count == null ? 0 : (double)i.Count, i.Weight == null ? 0 : (double)i.Weight, i.FoodSource.Source, address, i.FoodSource.FoodSourceType.FoodSourceType1);
+                    
+                    string categoryType;
+                    if (i.FoodCategory == null)
+                    {
+                        categoryType = i.USDACategory.Description;
+                    }
+                    else
+                    {
+                        categoryType = i.FoodCategory.CategoryType;
+                    }
+
+                    DateTime timeStamp = i.TimeStamp;
+
+                    double count;                                               
+                    if (i.Count == null)
+                    {
+                        count = 0;
+                    }
+                    else
+                    {
+                        count = (double)i.Count;
+                    }
+              
+                    double weight;
+                    if (i.Weight == null)
+                    {
+                        weight = 0;
+                    }
+                    else
+                    {
+                        weight = (double) i.Weight;
+                    }
+                    
+                    string foodSource = i.FoodSource.Source;
+                    // address
+                    string foodSourceType1 = i.FoodSource.FoodSourceType.FoodSourceType1;
+
+
+                    // Original version         @Author Nittaya
+                    //ds.Incoming.AddIncomingRow(i.FoodCategory == null ? i.USDACategory.Description : i.FoodCategory.CategoryType, i.TimeStamp, 
+                    //    i.Count == null ? 0 : (double)i.Count, i.Weight == null ? 0 : (double)i.Weight, i.FoodSource.Source, address, 
+                    //    i.FoodSource.FoodSourceType.FoodSourceType1
+
+
+                    // Condensed version @Author Jake Abel
+                    ds.Incoming.AddIncomingRow(categoryType, timeStamp, count, weight, foodSource, address, foodSourceType1);
+
+
                 }
             }
+
         }
         return ds;
     }
