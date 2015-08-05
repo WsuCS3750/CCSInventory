@@ -1,0 +1,54 @@
+﻿<h1>Edit Food</h1>
+
+<h2>Food In</h2>
+
+<h4>Data Object Parameters | Types</h4>
+
+<ul>
+    <li>@FoodInID       | short</li>
+    <li>@FoodCategoryID | short?</li>
+    <li>@USDAID         | short?</li>
+    <li>@FoodSourceID   | short</li>
+    <li>@Weight         | decimal</li>
+    <li>@TimeStamp      | DateTime</li>
+</ul>
+
+<h2>Food Out</h2>
+
+<h4>Data Object Parameters | Types</h4>
+
+<ul>
+    <li>@DistributionID | short</li>
+    <li>@FoodCategoryID | short?</li>
+    <li>@USDAID         | short?</li>
+    <li>@Weight         | double</li>
+    <li>@Count          | short?</li>
+    <li>@TimeStamp      | DateTime</li>
+</ul>
+
+<h4>Binding a DropDownList</h4>
+
+<pre>
+var editFoodOutQuery = (from c in db.FoodOuts
+                        where c.DistributionID.Equals(shDistID)
+                        select new 
+                        { 
+                            c.DistributionID, 
+                            c.FoodCategoryID, 
+                            c.USDAID,
+                            c.Weight, 
+                            c.Count, 
+                            c.TimeStamp,
+                        });
+
+lstFoodCategory = db.FoodCategories.OrderBy(x => x.FoodCategoryID).ToList();
+ddlFoodOutCategoryType.DataSource = lstFoodCategory;
+ddlFoodOutCategoryType.DataBind();
+</pre>
+
+<h3>If Modifying - Items of Note</h3>
+
+<ul>
+    <li>Food In / Food Out version of page checked by query string</li>
+    <li>USDA Toggle auto switches the USDAID or FoodCategoryID to null upon save, depending on user selection</li>
+</ul>

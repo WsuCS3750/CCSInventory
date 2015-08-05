@@ -1,0 +1,28 @@
+﻿<h1>Donor Service</h1>
+
+<h2>Description</h2>
+
+<p>Provides a JavaScript array of all food sources suitable for use in an autocomplete or other 
+    JavaScript function.</p>
+
+<h2>Array Sample</h2>
+
+<pre>
+donorNames = [{label: 'Clark Kent', address: '125 Awesome Road', type: 'Individual' },
+    {label: 'Elmer Fudd', address: 'jlkfdjdlsf', type: 'Individual' }];
+</pre>
+
+<h2>Usage</h2>
+
+<pre>
+&lt;script src="../js/jquery-ui-1.10.0.custom.min.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;link href="../css/ui-lightness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet" /&gt;
+
+&lt;script src="DonorService.ashx" type="text/javascript"&gt;&lt;/script&gt;
+    
+&lt;script&gt;
+    $(document).ready(function () {
+        $('#&lt;%= txtDonorName.ClientID %&gt;').autocomplete({ source: donorNames });
+    });
+&lt;/script&gt;
+</pre>

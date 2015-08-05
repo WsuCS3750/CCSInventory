@@ -1,0 +1,29 @@
+﻿<h1>Database Access</h1>
+
+<h2>LINQ</h2>
+
+<p>Database access is abstracted to LINQ data objects which are mapped to the SQL Server database tables.</p>
+
+<h2>Sample Usage</h2>
+
+<p>The following code sample gets a count of containers with a given bin number</p>
+
+<pre>
+using (CCSEntities db = new CCSEntities())
+{
+    int number = 1234;
+
+    int count = (from c in db.Containers
+                    where c.BinNumber == BinNumberCandidate
+                    select c).Count();
+}
+</pre>
+
+<p>The following code sample generates a list of containers suitable for a datatable or gridview</p>
+
+<pre>
+using (CCSEntities db = new CCSEntities())
+{
+    List<Container> lstContainers = (from c in db.Containers where c.Weight !=0 select c).ToList();
+}
+</pre>

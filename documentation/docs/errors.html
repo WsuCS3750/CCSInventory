@@ -1,0 +1,24 @@
+﻿<h1>Error Logging</h1>
+
+<p>Errors are caught by surrounding <pre>try{} catch{}</pre> blocks, and logged. 
+    The user is then directed to errorpages/error.aspx
+</p>
+<p>Special consideration must be give when redirecting users via <pre>Response.Redirect()</pre>
+    because that method works by generating a redirection exception which is inadvertantly 
+    caught by error logging.
+</p>
+<p>The error log can be viewd at log/view-errorlog.aspx</p>
+<h2>Sample Usage</h2>
+<pre>
+try
+{
+    // DO WORK
+    Response.Redirect('new-page.aspx');
+}
+catch (System.Threading.ThreadAbortException) { }
+catch (Exception ex)
+{
+    LogError.logError(ex);
+    Response.Redirect("../errorpages/error.aspx");
+}
+</pre>

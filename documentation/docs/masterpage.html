@@ -1,0 +1,27 @@
+﻿<h1>Masterpage Inheritance</h1>
+
+<p>Masterpages provide an "inheritance template" for pages that inherit from it.
+    They are used in this project to provide graphical unity and user authentication
+    across the application.
+</p>
+
+<h2>Masterpages</h2>
+
+<h3>global.master</h3>
+
+<p>The masterpage global.master provides a "user authentiaction umbrella" for the entire project,
+    as well as session time-out managment. It does not provide any HTML structure, 
+    but does include the background CCS watermark image.
+</p>
+
+<h3>Mobile.master</h3>
+
+<p>All tablet pages inherit from Mobile.master. It provides the flexible width container, top menu, and other styles
+    inherited by all tablet pages. Additionally, many desktop pages inherit from mobile.master styles.
+</p>
+
+<h3>Desktop.master</h3>
+
+<p>Desktop designed pages (reports, user admin, etc) inherit from Desktop.master, which provides a style
+    more appropriate for desktop width functions.
+</p>

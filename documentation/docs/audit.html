@@ -1,0 +1,39 @@
+﻿<h1>Audit</h1>
+
+<p>
+    The audit functionality, located in the audit folder, provides the ability quickly as easily inspect each
+    container in the warehouse and either verify or correct their contents.
+</p>
+
+<h2>Audit Pages</h2>
+
+<h3>default.aspx</h3>
+
+<p>
+    This page is used to show the user all audits that have been performed. They can click the accompanying
+    "adjustments" button to view any corrections that were made during the audit. Using the "Perform Audit"
+    button launches an audit session.
+</p>
+
+<h3>view.aspx</h3>
+
+<p>
+    This page displays the adjustments made during the audit process.
+</p>
+
+<h3>perform.aspx</h3>
+
+<p>
+    This page uses two GridViews. The first displays all containers that haven't yet been either verified or
+    corrected. The second gridview shows all adjustments that were made to containers during the audit.
+    The user can either select the "Verify" button next to a container or enter the container's
+    Container Number to be brought the the verify.aspx page.
+</p>
+
+<h3>verify.aspx</h3>
+
+<p>
+    This page displays the information about the container. If the information is changed, then the "Verify"
+    button turns into a "Save" button, meaning that the container's contents are incorrect and need to be
+    adjusted.
+</p>
