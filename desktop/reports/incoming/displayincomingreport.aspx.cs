@@ -155,25 +155,84 @@ public partial class desktop_reports_incoming_DisplayIncomingReport : System.Web
             data = foodInRegularData;
 
 
-
-
-
             // Static variables of what they want to come first.    @Author Jake Abel
             const string taxable = "In-Kind (Taxable)";
             const string nonTaxable = "In-Kind (Non-Tax)";
             const string noAgency = "No-Agency";
 
+
+
+            /**
+                    Before fixing the date sort too.
+            */
+
+//            
+//                        // ds.Incoming.AddIncomingRow(categoryType, timeStamp, count, weight, foodSource, address, foodSourceType1);
+//                        // Sort based on in-Kind (taxable and non-tax) and then 
+//                        data.Sort(delegate (FoodIn dis, FoodIn otr)
+//                        {
+//            
+//                            //                dis.FoodSource.FoodSourceType.FoodSourceType1         // 
+//                            // Put the taxable first, and then the non taxable, and then whatever
+//                            if (dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) || dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable) ||
+//                                otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) || otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+//                            {
+//                                if (dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable))
+//                                {
+//                                    return -1;
+//                                }
+//            
+//                                if (otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) && !dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable))
+//                                {
+//                                    return 1;
+//                                }
+//            
+//                                if (dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+//                                {
+//                                    return -1;
+//                                }
+//            
+//                                if (otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable) && !dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
+//                                {
+//                                    return 1;
+//                                }
+//            
+//                            }
+//            
+//                            if (dis.FoodSource.FoodSourceType.FoodSourceType1.Contains(taxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Contains(taxable))
+//                            {
+//                                return 1;
+//                            }
+//                            if (dis.FoodSource.FoodSourceType.FoodSourceType1.Contains(nonTaxable) && !otr.FoodSource.FoodSourceType.FoodSourceType1.Contains(nonTaxable))
+//                            {
+//                                return 1;
+//                            }
+//            
+//                            return dis.FoodSource.Source.CompareTo(otr.FoodSource.Source);
+//            
+//            
+//                            //                return 0;
+//                        });
+
+
+
+
             /**
                 Sort the foodIn similar to the food out
                 ADDED by
                 @Author Jake Abel
+
+
+                        Modified to include the date sorting. Sept 1, 2015
+                        Modified to include the row id sorting Sept 1, 2015
             */
 
-            // ds.Incoming.AddIncomingRow(categoryType, timeStamp, count, weight, foodSource, address, foodSourceType1);
+            //////// ds.Incoming.AddIncomingRow(categoryType, timeStamp, count, weight, foodSource, address, foodSourceType1);
             // Sort based on in-Kind (taxable and non-tax) and then 
             data.Sort(delegate (FoodIn dis, FoodIn otr)
             {
-//                dis.FoodSource.FoodSourceType.FoodSourceType1         // 
+                
+                // dis.FoodSource.FoodSourceType.FoodSourceType1         
                 // Put the taxable first, and then the non taxable, and then whatever
                 if (dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) || dis.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable) ||
                     otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(taxable) || otr.FoodSource.FoodSourceType.FoodSourceType1.Equals(nonTaxable))
@@ -209,17 +268,31 @@ public partial class desktop_reports_incoming_DisplayIncomingReport : System.Web
                     return 1;
                 }
 
-                return dis.FoodSource.Source.CompareTo(otr.FoodSource.Source);
+//                return dis.FoodSource.Source.CompareTo(otr.FoodSource.Source);
+                if (dis.FoodSource.Source.CompareTo(otr.FoodSource.Source) == 1 ||
+                    dis.FoodSource.Source.CompareTo(otr.FoodSource.Source) == -1)
+                {
+                    return dis.FoodSource.Source.CompareTo(otr.FoodSource.Source);
+                }
+
+//                return dis.TimeStamp.CompareTo(otr.TimeStamp);
+                int timeSort = dis.TimeStamp.CompareTo(otr.TimeStamp);
+                if (timeSort == 1 || timeSort == -1)
+                {
+                    return timeSort;
+                }
+
+                // Sort by the food in ID last of all.
+                return dis.FoodInID.CompareTo(otr.FoodInID);
 
 
-//                return 0;
             });
 
 
 
 
 
-            //ORIGINAL VERSION, @Author Nittaya P.
+            // COMPLETE ORIGINAL VERSION, @Author Nittaya P.
             //            foreach (var i in data)
             //            {
             //                if (i.FoodCategory != null || i.USDACategory != null)
